@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "version": "1.0.0",
+    "name": "BlindersV",
+    "permissions": [
+        "scripting"
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ],
+    "icons": {
+        "32": "icon32.png"
+    },
+    "content_scripts": [
+  {
+    "matches": ["<all_urls>"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }
+]
+}

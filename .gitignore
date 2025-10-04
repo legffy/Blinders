@@ -137,3 +137,51 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+# --- Python backend (FastAPI) ---
+# venvs
+.venv/
+venv/
+env/
+# bytecode + caches
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+# alembic junk (bytecode)
+alembic/versions/*.pyc
+
+# --- Vite/Vercel/Build tooling ---
+# Vite cache (sometimes lives outside node_modules)
+.vite/
+**/.vite/
+# Vercel project linking info
+.vercel/
+
+# --- Chrome Extension artifacts ---
+# packed zips / release bundles
+*.zip
+# (dist is already ignored; leaving this note)
+# extension/dist/  # covered by your global 'dist'
+
+# --- Editor / OS noise ---
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Docker / local DB (if you try SQLite locally) ---
+*.db
+*.sqlite3
+
+# --- Env files (you already have good rules; reinforcing common variants) ---
+.envrc
+.env.development.local
+.env.test.local
+.env.production.local
+
