@@ -1,4 +1,5 @@
 "use client"
+import { projectCompilationEventsSubscribe } from "next/dist/build/swc/generated-native";
 import Image from "next/image";
 import React, {useEffect, useState} from "react";
 export default function Home() {
@@ -6,7 +7,7 @@ export default function Home() {
   const [health, setHealth] = useState("not ok");
   const testHealth = async() =>{
     try{
-    const res = await fetch(`http://127.0.0.1:8000/`);
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL);
     if(!res){
       console.error("error fetching health");
       return;
