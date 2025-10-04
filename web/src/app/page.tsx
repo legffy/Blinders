@@ -6,8 +6,10 @@ export default function Home() {
 
   const [health, setHealth] = useState("not ok");
   const testHealth = async() =>{
+
     try{
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL);
+      const url: string = process.env.NEXT_PUBLIC_API_URL ?? (() => { throw new Error("Missing NEXT_PUBLIC_API_URL"); })();
+    const res = await fetch(url);
     if(!res){
       console.error("error fetching health");
       return;
