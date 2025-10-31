@@ -19,6 +19,8 @@ jobs:
     if: contains(github.event.head_commit.message, '[skip-ci]') == false
     name: API (FastAPI builds)
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{secrets.DATABASE_URL}}
     defaults: { run: { working-directory: api } }
     steps:
       - uses: actions/checkout@v4
@@ -26,8 +28,7 @@ jobs:
         with: { python-version: "3.12" }
       - run: python -m pip install --upgrade pip
       - run: pip install -r requirements.txt
-      # sanity: imports must work
-      - run: python -c "import app, app.main; print('app ok')"
+      - run: python -c "import app, api.main; print('app ok')"
 
   web:
     name: Web (Next.js builds)
