@@ -28,7 +28,7 @@ jobs:
         with: { python-version: "3.12" }
       - run: python -m pip install --upgrade pip
       - run: pip install -r requirements.txt
-      - run: python -c "import app, api.main; print('app ok')"
+      - run: python -c "import app, app.main; print('app ok')"
 
   web:
     name: Web (Next.js builds)
