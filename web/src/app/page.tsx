@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 type HealthResponse = { status: string };
 
-export default function Home(): JSX.Element {
+export default function Home(): React.JSX.Element {
   const [health, setHealth] = useState<string>("not ok");
 
   async function testHealth(): Promise<void> {
