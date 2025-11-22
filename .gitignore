@@ -185,3 +185,4 @@ desktop.ini
 .env.test.local
 .env.production.local
 
+/extension

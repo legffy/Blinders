@@ -1,3 +1,3 @@
 ((): void => {
-  console.log("FocusGuard extension active");
+  console.log("Blinders extension active");
 })();
