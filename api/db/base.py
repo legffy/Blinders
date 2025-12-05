@@ -7,7 +7,7 @@ from pathlib import Path
 env_path = Path(__file__).resolve().parent.parent / ".env"
 print(env_path)
 load_dotenv(dotenv_path=env_path)
-DATABASE_URL: str = os.getenv("DB_URL","")
+DATABASE_URL: str | None =  os.getenv("DATABASE_URL") or os.getenv("DB_URL","")
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL is not set; check your environment / CI config.")
 
