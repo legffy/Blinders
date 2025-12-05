@@ -20,37 +20,73 @@ jobs:
     name: API (FastAPI builds)
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: ${{secrets.DATABASE_URL}}
-    defaults: { run: { working-directory: api } }
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    defaults:
+      run:
+        working-directory: api
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
-        with: { python-version: "3.12" }
+        with:
+          python-version: "3.12"
+
       - run: python -m pip install --upgrade pip
       - run: pip install -r requirements.txt
-      - run: python -c "import api, app.main; print('app ok')"
+      - run: python -c "import app, app.main; print('app ok')"
 
   web:
     name: Web (Next.js builds)
     runs-on: ubuntu-latest
-    defaults: { run: { working-directory: web } }
+    defaults:
+      run:
+        working-directory: web
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
-        with: { node-version: "20", cache: "npm", cache-dependency-path: "web/package-lock.json" }
-      - run: npm ci
-      - run: NEXT_PUBLIC_API_URL=https://example.com npm run build
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: "web/pnpm-lock.yaml"
+
+      - name: Enable corepack (pnpm)
+        run: corepack enable
+
+      - name: Install deps (pnpm)
+        run: pnpm install
+
+      - name: Build (pnpm)
+        run: NEXT_PUBLIC_API_URL=https://example.com pnpm run build
 
   extension:
     name: Extension (Vite builds + zip)
     runs-on: ubuntu-latest
-    defaults: { run: { working-directory: extensionVite } }
+    defaults:
+      run:
+        working-directory: extensionVite
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
-        with: { node-version: "20", cache: "npm", cache-dependency-path: "extensionVite/package-lock.json" }
-      - run: npm ci
-      - run: npm run build
-      - run: cd dist && zip -r ../blinders-extension.zip .
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: "extensionVite/pnpm-lock.yaml"
+
+      - name: Enable corepack (pnpm)
+        run: corepack enable
+
+      - name: Install deps (pnpm)
+        run: pnpm install
+
+      - name: Build (pnpm)
+        run: pnpm run build
+
+      - name: Zip dist
+        run: cd dist && zip -r ../blinders-extension.zip .
+
       - uses: actions/upload-artifact@v4
-        with: { name: blinders-extension, path: extensionVite/blinders-extension.zip }
+        with:
+          name: blinders-extension
+          path: extensionVite/blinders-extension.zip
