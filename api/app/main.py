@@ -2,7 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from db.session import engine
 from sqlalchemy import text
+from routes import auth
 api = FastAPI()
+api.include_router(auth.router)
 
 api.add_middleware(
     CORSMiddleware,
