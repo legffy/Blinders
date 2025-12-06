@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from db.base import engine
+from db.session import engine
 from sqlalchemy import text
 api = FastAPI()
 
