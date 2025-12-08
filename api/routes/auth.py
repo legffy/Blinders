@@ -1,17 +1,23 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-
+from jose import jwt
+import os
 from db.session import get_db
 from models.user import User
 from core.security import hash_password,  verify_password
 from schemas.auth import SignupBody, LoginBody
-
+from typing import Any, Dict, Optional
+from dotenv import load_dotenv
+from pathlib import Path
+env_path = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(dotenv_path=env_path)
 router: APIRouter = APIRouter(
     prefix="/auth",
     tags=["auth"],
 )
 
+secret = os.getenv("JWT_SECRET")
 @router.post("/signup")
 async def signup(
     body: SignupBody,
@@ -65,13 +71,19 @@ async def login(
                 status_code = status.HTTP_401_UNAUTHORIZED,
                 detail = "Incorrect Password"
             )
+    payload: Dict[str, Any] = {
+        "sub": str(user.id),
+        "email": user.email,
+    }
+    token: str = jwt.encode(payload,secret,algorithm = "HS256")
     return {
             "message": "Login successful",
             "user": {
                 "id": str(user.id),
                 "email": user.email,
                 "created_at":user.created_at,
-            }
+            },
+            "token": token
         }
         
 

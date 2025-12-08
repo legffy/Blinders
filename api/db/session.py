@@ -1,11 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 import os
-import os
 from dotenv import load_dotenv
 from pathlib import Path
 env_path = Path(__file__).resolve().parent.parent / ".env"
-print(env_path)
 load_dotenv(dotenv_path=env_path)
 DATABASE_URL: str | None =  os.getenv("DATABASE_URL")
 if not DATABASE_URL:
