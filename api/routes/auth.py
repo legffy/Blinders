@@ -8,16 +8,13 @@ from models.user import User
 from core.security import hash_password,  verify_password
 from schemas.auth import SignupBody, LoginBody
 from typing import Any, Dict, Optional
-from dotenv import load_dotenv
+from core.security import create_access_token
 from pathlib import Path
-env_path = Path(__file__).resolve().parent.parent / ".env"
-load_dotenv(dotenv_path=env_path)
+from core.deps import get_current_user
 router: APIRouter = APIRouter(
     prefix="/auth",
     tags=["auth"],
 )
-
-secret = os.getenv("JWT_SECRET")
 @router.post("/signup")
 async def signup(
     body: SignupBody,
@@ -71,11 +68,8 @@ async def login(
                 status_code = status.HTTP_401_UNAUTHORIZED,
                 detail = "Incorrect Password"
             )
-    payload: Dict[str, Any] = {
-        "sub": str(user.id),
-        "email": user.email,
-    }
-    token: str = jwt.encode(payload,secret,algorithm = "HS256")
+
+    token: str =create_access_token(str(user.id))
     return {
             "message": "Login successful",
             "user": {
@@ -83,7 +77,14 @@ async def login(
                 "email": user.email,
                 "created_at":user.created_at,
             },
-            "token": token
+            "access_token": token,
+            "token_type": "bearer",
         }
-        
-
+    
+@router.get("/me")
+async def read_me(current_user: User = Depends(get_current_user)) -> dict:
+    return {
+        "id": str(current_user.id),
+        "email": current_user.email,
+        "created_at": current_user.created_at,
+    }
