@@ -1,4 +1,4 @@
-# 📘 Blinders
+# Blinders
 
 Blinders is a browser extension + web app that helps users reduce impulsive browsing by identifying “high-dopamine” websites and adding small friction (delay walls, reflections) before opening them. The goal is simple: put guardrails on distractions and boost intentionality online.
 
