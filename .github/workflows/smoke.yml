@@ -25,6 +25,10 @@ jobs:
       DATABASE_SYNC_URL: ${{secrets.DATABASE_SYNC_URL}}
       JWT_ALGORITHM: ${{secrets.JWT_ALGORITHM}}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${{secrets.ACCESS_TOKEN_EXPIRE_MINUTES}}
+      GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+      GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+      BACKEND_BASE_URL: ${{secrets.BACKEND_BASE_URL}}
+      FRONTEND_BASE_URL: ${{secrets.FRONTEND_BASE_URL}}
     defaults: { run: { working-directory: api } }
     steps:
       - uses: actions/checkout@v4
