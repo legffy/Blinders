@@ -1,9 +1,11 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { loginRequest, LoginResponse } from "@/lib/api";
+import { loginRequest, LoginResponse, meRequest } from "@/lib/api";
+import type { MeResponse } from "@/lib/api";
 import { JSX } from "react";
+import  GoogleButton  from "../components/GoogleButton"
 
 export default function LoginPage(): JSX.Element {
   const [email, setEmail] = useState<string>("");
@@ -12,18 +14,35 @@ export default function LoginPage(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
 
   const router = useRouter();
+  useEffect(() => {
+    async function fetchMe(): Promise<void> {
+      try {
+        const res = await meRequest();
+        const data = await res.json();
 
+        if (!res.ok) {
+          setError(data.detail ?? "Failed to fetch user");
+        } else {
+          router.push('/dashboard')
+        }
+      } catch (err) {
+        setError("Request failed");
+        router.push('/');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    void fetchMe();
+  }, []);
+  
   async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     try {
-      const data: LoginResponse = await loginRequest(email, password);
-
-      // temp dev auth: store token in localStorage
-      localStorage.setItem("access_token", data.access_token);
-
+      await loginRequest(email, password);
       router.push("/dashboard");
     } catch (err) {
       setError("Invalid email or password");
@@ -62,8 +81,8 @@ export default function LoginPage(): JSX.Element {
         >
           {loading ? "Logging in..." : "Login"}
         </button>
-
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        <GoogleButton/>
+        {error && <p className="text-red-600 text-sm">{error === "Missing access_token cookie" ? "" : error }</p>}
       </form>
     </main>
   );

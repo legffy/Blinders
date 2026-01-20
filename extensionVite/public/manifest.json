@@ -19,6 +19,6 @@
     "run_at": "document_idle"
   }
 ],
- "action": {"default_popup":"src/popup/index.html"},
+ "action": {"default_popup":"index.html"},
    "background": { "service_worker": "background.js", "type": "module" }
 }

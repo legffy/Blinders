@@ -8,7 +8,7 @@ api.include_router(auth.router)
 
 api.add_middleware(
     CORSMiddleware,
-    allow_origins = ["http://localhost:3000","https://blinders-sigma.vercel.app"],
+    allow_origins = ["http://localhost:3000","https://blinders-sigma.vercel.app","chrome-extension://ojfeionphkobiplkdlcbejikdddimjdg"],
     allow_credentials = True,
     allow_methods = ["*"],
     allow_headers = ["*"],

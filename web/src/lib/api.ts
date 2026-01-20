@@ -1,3 +1,4 @@
+
 export type LoginResponse = {
   message: string;
   user: {
@@ -5,10 +6,13 @@ export type LoginResponse = {
     email: string;
     created_at: string;
   };
-  access_token: string;
-  token_type: string;
 };
 
+export type MeResponse = {
+  id: string;
+  email: string;
+  created_at: string;
+};
 const API_BASE_URL: string = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export async function signupRequest(email: string, password: string): Promise<Response> {
@@ -28,6 +32,7 @@ export async function loginRequest(email: string, password: string): Promise<Log
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ email, password }),
   });
 
@@ -41,12 +46,21 @@ export async function loginRequest(email: string, password: string): Promise<Log
   return data;
 }
 
-export async function meRequest(token: string): Promise<Response> {
+export async function meRequest(): Promise<Response> {
+  console.log("me request");
   const res: Response = await fetch(`${API_BASE_URL}/auth/me`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: "include",
   });
   return res;
 }
+export async function logout(): Promise<Response>{
+  
+  const res: Response = await fetch(`${API_BASE_URL}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  return res;
+} 
+ 
