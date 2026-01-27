@@ -9,6 +9,7 @@ from urllib.parse import urlencode
 import httpx
 from db.session import get_db
 from models.user import User
+from models.domain_guardrail import DomainGuardrail
 from core.security import hash_password,  verify_password
 from schemas.auth import SignupBody, LoginBody
 from typing import Any, Dict, Optional
