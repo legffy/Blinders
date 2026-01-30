@@ -313,6 +313,18 @@ async def google_callback(
         max_age=ACCESS_COOKIE_MAX_AGE_SECONDS,
         path=COOKIE_PATH,
     )
+    refresh_value: str = create_refresh_token_value()
+    await save_refresh_token(db, user.id, refresh_value, REFRESH_COOKIE_MAX_AGE_SECONDS)
+
+    resp.set_cookie(
+        key=REFRESH_COOKIE_NAME,
+        value=refresh_value,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        max_age=REFRESH_COOKIE_MAX_AGE_SECONDS,
+        path=COOKIE_PATH,
+    )
 
     return resp
 
