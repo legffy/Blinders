@@ -3,12 +3,28 @@ import type { ExtensionMessage} from "./shared/messages";
 type AuthStatus = 
 | { authenticated: true; user: { id: string; email: string} }
 | { authenticated: false};
+export type Guardrail = {
+  id:string;
+  domain: string;
+  rule: string;
+  is_active: boolean;
+}
+export type Guardrails  = {
+  guardrails: Guardrail[], count: number
+};
+export type FetchGuardrailStatusResult =
+  | { authenticated: false }
+  | { authenticated: true; guardrails: Guardrails };
+
+
+
 const WEB_URL: string = import.meta.env.WEB_URL ?? "http://localhost:3000";
 const API_URL: string = import.meta.env.API_URL ?? "http://localhost:8000";
 
 let cachedStatus: AuthStatus = { authenticated: false};
 let cachedAtMs: number = 0;
 const CACHE_TTL_MS: number= 30_000;
+
 
 async function fetchAuthStatus(): Promise<AuthStatus> {
   const res: Response = await fetch(`${API_URL}/auth/me`, {
@@ -20,6 +36,17 @@ async function fetchAuthStatus(): Promise<AuthStatus> {
   const user: {id: string; email: string } = await res.json();
   return { authenticated: true, user };
 }
+export async function fetchGuardRailStatus(): Promise<FetchGuardrailStatusResult> {
+  const res: Response = await fetch(`${API_URL}/guardrails/`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!res.ok) return {authenticated: false};
+
+  const guardrails: Guardrails = await res.json();
+  return { authenticated: true,  guardrails: guardrails };
+}
+/*
 /*
 async function ping(): Promise<void> {
   const API_URL: string = "https://blinders-2l06.onrender.com";

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Dashboard } from "./Dashboard";
 import Signedout from "./Signedout";
 
+
 type AuthState = "SIGNED_OUT" | "SIGNING_IN" | "SIGNED_IN" | "ERROR";
 
 type AuthStatusResponse =
@@ -10,9 +11,9 @@ type AuthStatusResponse =
 
 export default function Popup() {
   const [authState, setAuthState] = useState<AuthState>("SIGNED_OUT");
+  
 
   const checkAuth = (force: boolean): void => {
-    console.log("hello my nigga");
     chrome.runtime.sendMessage({ type: "AUTH_STATUS", force }, (res: AuthStatusResponse) => {
       if (chrome.runtime.lastError) {
         console.error("AUTH_STATUS failed:", chrome.runtime.lastError.message);
@@ -24,11 +25,9 @@ export default function Popup() {
   };
 
   useEffect((): void => {
-    console.log("effect");
     checkAuth(false);
-    console.log("effect done");
   }, []);
-
+  
   if (authState === "ERROR") {
     return <p>Extension auth check failed. Check service worker.</p>;
   }

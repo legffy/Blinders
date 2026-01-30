@@ -27,7 +27,6 @@ export default function LoginPage(): JSX.Element {
         }
       } catch (err) {
         setError("Request failed");
-        router.push('/');
       } finally {
         setLoading(false);
       }
