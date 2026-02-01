@@ -330,17 +330,23 @@ async def google_callback(
 
 @router.post("/refresh")
 async def refresh(request: Request, db: AsyncSession = Depends(get_db)) -> JSONResponse:
-    refresh_value: str | None = request.cookies.get(REFRESH_COOKIE_NAME)
-    if refresh_value is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing refresh token")
-
-    user_id = await validate_refresh_token(db, refresh_value)
+    old_refresh: str | None = request.cookies.get(REFRESH_COOKIE_NAME)
+    if old_refresh is None:
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Missing refresh token")
+    user_id = await validate_refresh_token(db, old_refresh)
     if user_id is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
+        raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Invalid refresh token")
+    await revoke_refresh_token(db, old_refresh)
 
+    # Issue new refresh token
+    new_refresh: str = create_refresh_token_value()
+    await save_refresh_token(db, user_id, new_refresh, REFRESH_COOKIE_MAX_AGE_SECONDS)
+
+    # Issue new access token
     new_access: str = create_access_token(str(user_id))
 
     resp: JSONResponse = JSONResponse({"ok": True})
+
     resp.set_cookie(
         key=ACCESS_COOKIE_NAME,
         value=new_access,
@@ -350,4 +356,15 @@ async def refresh(request: Request, db: AsyncSession = Depends(get_db)) -> JSONR
         max_age=ACCESS_COOKIE_MAX_AGE_SECONDS,
         path=COOKIE_PATH,
     )
+
+    resp.set_cookie(
+        key=REFRESH_COOKIE_NAME,
+        value=new_refresh,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        max_age=REFRESH_COOKIE_MAX_AGE_SECONDS,
+        path=COOKIE_PATH,
+    )
+
     return resp
