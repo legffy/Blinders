@@ -115,6 +115,7 @@ export default function DashboardPage(): JSX.Element {
             </div>
         })}</div>
       </div>
+      <button onClick={()=>{router.push('/settings')}} className="border-2 border-black p-2 hover:bg-gray-100">Settings</button>
       <button onClick={()=>{logoutLocal()}} className="border-2 border-black p-2 hover:bg-gray-100">logout</button>
     </main>
   );
