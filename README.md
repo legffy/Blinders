@@ -4,13 +4,13 @@ Blinders is a browser extension + web app that helps users reduce impulsive brow
 
 Tech stack: Next.js (React + TypeScript) · FastAPI (Python) · Postgres (Supabase/Neon) · Chrome MV3 Extension
 
-🧠 Project Structure
+Project Structure
 /api         → FastAPI backend (REST API, auth, DB models)
 /web         → Next.js frontend (dashboard & settings)
 /extension   → Chrome MV3 extension (delay wall, domain detection)
 /infra       → Deployment config, docker, CI files
 
-⚙️ Local Setup
+Local Setup
 1️⃣ Clone the Repo
 git clone https://github.com/<your-username>/blinders.git
 cd blinders
@@ -70,15 +70,13 @@ Open DevTools → Console
 
 You should see: "Blinders extension active"
 
-🌍 Deployment
+Deployment
 Backend
 
 Deploy on:
 
 Railway, Render, or Fly.io
 
-Make sure to set:
-DATABASE_URL · JWT_SECRET
 
 Frontend
 
