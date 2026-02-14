@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { meRequest, logout, guardrailsRequest } from "@/lib/api";
 import { useRouter } from 'next/navigation';
 import {JSX} from "react";
-import type { MeResponse,GuardrailsResponse, Guardrail } from "@/lib/api";
+import type { MeResponse,GuardrailsResponse, GuardrailDTO } from "@/lib/api";
 
 export default function DashboardPage(): JSX.Element {
   const [me, setMe] = useState<MeResponse | null>(null);
@@ -107,7 +107,7 @@ export default function DashboardPage(): JSX.Element {
       <p>Created at: {me.created_at}</p>
       <div>
         <h2 className="text-l">Guardrails:</h2>
-        <div>{guardrails?.guardrails.map((guardrail: Guardrail, index)=>{
+        <div>{guardrails?.guardrails.map((guardrail: GuardrailDTO, index)=>{
           return <div key = {index}>
             <p>Domain:{guardrail.domain}</p>
             <p>active:{guardrail.is_active ? "true" : "false"}</p>
