@@ -13,14 +13,20 @@ export type MeResponse = {
   email: string;
   created_at: string;
 };
-export type Guardrail = {
+export type GuardrailDTO = {
   id: string;
   domain: string;
   rule: string;
   is_active: boolean;
 }
+export type CreateGuardrailDTO = {
+  user_id: string;
+  domain: string;
+  rule: string;
+  is_active: boolean;
+}
 export type GuardrailsResponse ={
-  guardrails: Guardrail[];
+  guardrails: GuardrailDTO[];
   count: number;
 };
 export type ApiFetchOptions = Omit<RequestInit, "credentials"> & {
@@ -70,6 +76,14 @@ export async function logout(): Promise<Response>{
 } 
 export async function guardrailsRequest(): Promise<Response> {
   return apiFetch("/guardrails/", { method: "GET"});
+}
+export async function addGuardrail(Guardrail: CreateGuardrailDTO): Promise<Response> {
+  return apiFetch("/guardrails/", {method: "POST", headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(Guardrail),
+  retry: false,
+})
 }
 export async function apiFetch(input: string, init: ApiFetchOptions = {}): Promise<Response> {
   const url: string = input.startsWith("http") ? input : `${API_BASE_URL}${input}`;
