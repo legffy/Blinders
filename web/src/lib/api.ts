@@ -16,13 +16,13 @@ export type MeResponse = {
 export type GuardrailDTO = {
   id: string;
   domain: string;
-  rule: string;
+  rule: number;
   is_active: boolean;
 }
 export type CreateGuardrailDTO = {
   user_id: string;
   domain: string;
-  rule: string;
+  rule: number;
   is_active: boolean;
 }
 export type GuardrailsResponse ={

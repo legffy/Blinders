@@ -5,6 +5,9 @@ export type AuthStatus = {
     type: "AUTH_STATUS"
     force: boolean
 }
+export type GuardrailGet ={
+    type: "GUARDRAILS_GET"; force?: boolean 
+}
 
 export type ExtensionMessage =
-| AuthStartMsg | AuthStatus
+| AuthStartMsg | AuthStatus | GuardrailGet

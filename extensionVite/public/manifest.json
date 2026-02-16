@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "name": "BlindersV",
     "permissions": [
-        "scripting"
+        "scripting",
+        "storage"
     ],
     "host_permissions": [
         "http://*/*",
